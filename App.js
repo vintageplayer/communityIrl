@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { PermissionsAndroid, Platform, Text } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import axios from 'axios';
 const App = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const previousLocation = useRef(null);
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {
@@ -31,13 +32,12 @@ const App = () => {
     }
   };
 
-  const sendLocationToServer = async () => {
+  const sendLocationToServer = async (location) => {
     try {
       const response = await axios.post('https://webhook.site/90efd798-cb95-4dce-953d-a98467c5f769', {
-        latitude,
-        longitude,
+        location
       });
-      console.log('Location sent to server:', response.data);
+      console.log('Location sent to server:', location);
     } catch (error) {
       console.log('Error sending location to server:', error);
     }
@@ -46,9 +46,29 @@ const App = () => {
   const getLocation = () => {
     Geolocation.getCurrentPosition(
       (position) => {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-        sendLocationToServer();
+        const newLatitude = position.coords.latitude;
+        const newLongitude = position.coords.longitude;
+
+        if (newLatitude !== latitude || newLongitude !== longitude) {
+          setLatitude(newLatitude);
+          setLongitude(newLongitude);
+
+          if (
+            !previousLocation.coords ||
+            (previousLocation.coords.latitude !== newLatitude ||
+              previousLocation.coords.longitude !== newLongitude)
+          ) {
+            sendLocationToServer({
+              'latitude': newLatitude,
+              'longitude': newLongitude
+            });
+          }
+
+          previousLocation.coords = {
+            latitude: newLatitude,
+            longitude: newLongitude,
+          };
+        }
       },
       (error) => console.log(error.message),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
@@ -58,6 +78,16 @@ const App = () => {
   useEffect(() => {
     requestLocationPermission();
     getLocation();
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getLocation();
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
