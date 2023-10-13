@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { PermissionsAndroid, Platform, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 
@@ -54,9 +55,9 @@ const App = () => {
           setLongitude(newLongitude);
 
           if (
-            !previousLocation.coords ||
-            (previousLocation.coords.latitude !== newLatitude ||
-              previousLocation.coords.longitude !== newLongitude)
+            !previousLocation.current ||
+            (previousLocation.current.latitude !== newLatitude ||
+              previousLocation.current.longitude !== newLongitude)
           ) {
             sendLocationToServer({
               'latitude': newLatitude,
@@ -64,7 +65,7 @@ const App = () => {
             });
           }
 
-          previousLocation.coords = {
+          previousLocation.current = {
             latitude: newLatitude,
             longitude: newLongitude,
           };
@@ -91,12 +92,29 @@ const App = () => {
   }, []);
 
   return (
-    <Text>
-      Latitude: {latitude}{'\n'}
-      Longitude: {longitude}
-    </Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>
+        Latitude: {latitude}{'\n'}
+        Longitude: {longitude}
+      </Text>
+    </View>
   );
 
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: 'rgb(59,108,212)',
+    fontSize: 42,
+    fontWeight: '100',
+    textAlign: 'center',
+  },
+});
 
 export default App;
