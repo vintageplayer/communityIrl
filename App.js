@@ -4,6 +4,7 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
+import {LOCATION_WEBHOOK} from '@env'
 
 const App = () => {
   const [latitude, setLatitude] = useState(null);
@@ -36,7 +37,7 @@ const App = () => {
 
   const sendLocationToServer = async (location) => {
     try {
-      const response = await axios.post('https://webhook.site/90efd798-cb95-4dce-953d-a98467c5f769', {
+      const response = await axios.post(LOCATION_WEBHOOK, {
         location
       });
       console.log('Location sent to server:', location);

@@ -1,3 +1,9 @@
+# Platform/Deployment Configs
+#
+.env
+yarn.lock
+package-lock.json
+
 # OSX
 #
 .DS_Store
