@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+import { NavigationContainer } from '@react-navigation/native';
 
 const App = () => {
   const [latitude, setLatitude] = useState(null);
@@ -92,12 +93,14 @@ const App = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>
-        Latitude: {latitude}{'\n'}
-        Longitude: {longitude}
-      </Text>
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <Text style={styles.text}>
+          Latitude: {latitude}{'\n'}
+          Longitude: {longitude}
+        </Text>
+      </View>
+    </NavigationContainer>
   );
 
 };
