@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+import { LOCATION_WEBHOOK } from '@env';
+import {styles} from './styles';
 
-export const LocationScreen = () => {
+export const LocationScreen = ({navigation}) => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const previousLocation = useRef(null);
@@ -97,21 +99,8 @@ export const LocationScreen = () => {
         Latitude: {latitude}{'\n'}
         Longitude: {longitude}
       </Text>
+      <View style={styles.space}></View>
+      <Button title="Logout" onPress={() => navigation.navigate("Login")} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: 'rgb(59,108,212)',
-    fontSize: 42,
-    fontWeight: '100',
-    textAlign: 'center',
-  },
-});
