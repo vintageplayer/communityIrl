@@ -5,11 +5,13 @@ import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { LOCATION_WEBHOOK } from '@env';
 import {styles} from './styles';
+import {useAuth} from '../contexts/Auth';
 
 export const LocationScreen = ({navigation}) => {
+  const {logout} = useAuth();
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const previousLocation = useRef(null);
+  const previousLocation = useRef(null);  
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {
@@ -100,7 +102,7 @@ export const LocationScreen = ({navigation}) => {
         Longitude: {longitude}
       </Text>
       <View style={styles.space}></View>
-      <Button title="Logout" onPress={() => navigation.navigate("Login")} />
+      <Button title="Logout" onPress={() => logout()} />
     </View>
   );
 };
