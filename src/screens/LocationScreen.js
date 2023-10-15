@@ -7,7 +7,7 @@ import { LOCATION_WEBHOOK } from '@env';
 import {styles} from './styles';
 import {useAuth} from '../contexts/Auth';
 
-export const LocationScreen = ({navigation}) => {
+export const LocationScreen = () => {
   const {logout} = useAuth();
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);

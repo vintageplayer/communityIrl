@@ -1,14 +1,14 @@
 import React from 'react';
-import {Button, View} from 'react-native';
+import {View, Text} from 'react-native';
 import {styles} from './styles';
 import {useAuth} from '../contexts/Auth';
 
-export const LoginScreen = () => {
-  const {login} = useAuth();
-
+export const NotificationsScreen = () => {
   return (
     <View style={styles.container}>
-      <Button title="Login" onPress={() => login()} />
+      <Text  style={styles.text} >
+        No Notifications to show.
+      </Text>
     </View>
   );
 };
